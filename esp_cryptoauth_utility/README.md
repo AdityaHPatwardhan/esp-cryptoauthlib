@@ -59,8 +59,14 @@ The validity (in years) of device certificate generated for `TrustCustom` chips 
 >Note: If `--valid-for-years` is not provided then default value for validity of certiticates will be used, which is 40 years.
 
 ### Using ATECC608A with ESP32-WROOM-32
-This is not recommended(as it requires manual connections, and user may easily be confused), but surely possible.`ATECC608A` uses `I2C` interface for serial communication so you will have to make required `I2C` connections such as `SCK, SDA, GND, VDD` between `ESP` and `ATECC608A`.
+`ATECC608A` uses `I2C` interface for serial communication so you will have to make required `I2C` connections such as `SCK, SDA, GND, VDD` between `ESP` and `ATECC608A`.
 * If you are using [ESP32-DevKitC](https://www.espressif.com/en/products/devkits/esp32-devkitc/resources) and connected ATECC608A to pins 21 (SDA), and 22(SCK) then you can directly use a prebuilt binary. The command is
 ```
 python secure_cert_mfg.py --flash sample_bins/secure_cert_mfg_esp32.bin
 ```
+See below options [building the firmware](./README.md#building-the-firmware-for-esp_cryptoauth_utility) for more details.
+
+### Building the firmware for "esp_cryptoauth_utility"
+When the secure_element (ATECC608A) is connected to I2C pins different than the pins used in sample binaries provided, then the users needs to build the firmware by selecting respective I2C pins
+
+The details on how to build the firmware are provided in the [firmware/README](firmware/README.md).
