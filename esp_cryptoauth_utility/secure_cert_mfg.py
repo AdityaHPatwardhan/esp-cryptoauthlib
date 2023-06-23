@@ -206,6 +206,7 @@ def provision_trustcustom_device(args, init_mfg):
 
     retval = init_mfg.exec_cmd(args.port, 'program-signer-cert', signer_cert_data)
     hs.serial.esp_cmd_check_ok(retval, 'program-signer-cert')
+    print('Pre-provisioning successful')
 
 
 def esp_handle_file(file_name, operation, data=None):
