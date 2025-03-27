@@ -1,0 +1,59 @@
+name: Build and Test
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  build:
+    name: Build Examples
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        idf_version: [release/v5.0, release/v5.1, release/v5.2, release/v5.3, release/v5.4, master]
+        target: [esp32, esp32s2, esp32s3, esp32c3, esp32c6, esp32h2]
+        include:
+          - idf_version: release/v5.0
+            target: [esp32, esp32s3, esp32c3]
+            image: espressif/idf:release-v5.0
+          - idf_version: release/v5.1
+            target: [esp32, esp32s3, esp32c3]
+            image: espressif/idf:release-v5.1
+          - idf_version: release/v5.2
+            target: [esp32, esp32s3, esp32c3]
+            image: espressif/idf:release-v5.2
+          - idf_version: release/v5.3
+            target: [esp32, esp32s3, esp32c3]
+            image: espressif/idf:release-v5.3
+          - idf_version: release/v5.4
+            target: [esp32, esp32s3, esp32c3]
+            image: espressif/idf:release-v5.4
+          - idf_version: master
+            target: [esp32, esp32s2, esp32s3, esp32c3, esp32c6, esp32h2]
+            image: espressif/idf:latest
+
+    steps:
+    - name: Set up Git repository
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+
+    - name: Set up ESP-IDF
+      uses: espressif/idf-action@v1
+      with:
+        version: ${{ matrix.idf_version }}
+
+    - name: Build example for ${{ matrix.idf_version }} and ${{ matrix.target }}
+      run: |
+        . $IDF_PATH/export.sh
+        idf.py set-target ${{ matrix.target }}
+        idf.py build
+      working-directory: examples/atecc608_ecdsa
